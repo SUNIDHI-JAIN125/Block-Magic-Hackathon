@@ -1,0 +1,12 @@
+{
+  "name": "ringle-nft-amm",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "SUNIDHI-JAIN125",
+  "license": "MIT",
+  "dependencies": {
+    "ethers": "^5.7.2",
+    "keccak256": "^1.0.6",
+    "merkletreejs": "^0.3.0"
+  }
+}
