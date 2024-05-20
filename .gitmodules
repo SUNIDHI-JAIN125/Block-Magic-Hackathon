@@ -1,3 +1,6 @@
 [submodule "amm-nft/lib/forge-std"]
 	path = amm-nft/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "amm-nft/lib/openzeppelin-contracts"]
+	path = amm-nft/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
