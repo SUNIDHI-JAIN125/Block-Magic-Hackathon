@@ -4,7 +4,7 @@ import nft3 from '../../public/images/nft3.svg'
 
 const NftCard = () => {
   return (
-    <div className=' rounded-md bg-primary  my-3 flex flex-col hover:scale-105 transition duration-500 cursor-pointer shadow-xl py-4 px-2'>
+    <div className=' rounded-md bg-primary  my-3 flex flex-col hover:scale-105 transition duration-500 cursor-pointer shadow-xl py-4 px-2 text-white'>
         <Image src={nft3} alt='' className=' rounded-md my-2 mx-auto' />
        <div className=''>
          <p className='text-[10px] font-semibold'>MeeKey NFt #006</p>
