@@ -1,15 +1,21 @@
-import React from 'react'
+import React, {useContext, useState} from 'react'
 import Image from 'next/image';
 import boxCat from '../../public/images/nft1.png'
 import dashboard from '../../public/icons/dash.svg'
-import message from '../../public/icons/message.svg'
+import game from '../../public/icons/game.svg'
 import settings from '../../public/icons/settings.svg'
-import market from '../../public/icons/market.svg'
-import bid from '../../public/icons/bids.svg'
-import fav from '../../public/icons/fav.svg'
 import wallet from '../../public/icons/wallet.svg'
 import collections from '../../public/icons/collections.svg'
+import Link from 'next/link';
+import { AppContext } from '@/contextAPI';
 const SideBar = () => {
+  const {setDashBoardState, dashBoardState} = useContext(AppContext)
+  const [indexColor, setIndexColor] = useState(0)
+
+  const setDashBoardAndIndexColor = (dashboard:string, color:number) => {
+    setDashBoardState(dashboard)
+    setIndexColor(color)
+  }
   return (
     <div className='flex flex-col bg-primary h-screen py-8  overflow-y-auto min-h-screen border-r border-gray-500'>
         <div className='flex flex-col mx-auto'>
@@ -28,22 +34,15 @@ const SideBar = () => {
              <div className='mt-5 ml-2'>
                 <div className=''>
                         <h1 className='text-[10px] font-semibold font-poppins my-4 text-white'>GENERAL</h1> 
-                          <div className='flex text-gray-300 space-x-4 hover:text-primary-button cursor-pointer hover:bg-black/20 hover:rounded-md hover:scale-125  hover:px-2 my-2 hover:transition duration-500'><Image  src={dashboard} alt='' width={20} height={20} /> <p className='text-[10px] font-semibold font-poppins'>Dashboard</p></div>
-                          <div className='flex text-gray-300 space-x-4 hover:text-primary-button cursor-pointer hover:bg-black/20 hover:rounded-md hover:scale-125  hover:px-2 my-2 hover:transition duration-500'><Image  src={message} alt='' width={20} height={20} /> <p className='text-[10px] font-semibold font-poppins'>Message</p></div>
-                          <div className='flex text-gray-300 space-x-4 hover:text-primary-button cursor-pointer hover:bg-black/20 hover:rounded-md hover:scale-125  hover:px-2 my-2 hover:transition duration-500'><Image  src={settings} alt='' width={20} height={20} /> <p className='text-[10px] font-semibold font-poppins'>Settings</p></div>
+                          <div className={`${indexColor == 0 ? 'bg-black/20 py-2 px-2 text-primary-button' :''} flex text-gray-300 space-x-4 hover:text-primary-button cursor-pointer hover:bg-black/20 hover:rounded-md hover:scale-125 py-2 hover:px-2 my-2 hover:transition duration-500`} onClick={()=>setDashBoardAndIndexColor("home", 0)}><Image  src={dashboard} alt='' width={20} height={20} /> <p className='text-[10px] font-semibold font-poppins'>Dashboard</p></div>
+                          <div className={`${indexColor == 2 ? 'bg-black/20 py-2 px-2 text-primary-button' :''} flex text-gray-300 space-x-4 hover:text-primary-button cursor-pointer hover:bg-black/20 hover:rounded-md hover:scale-125  py-2 hover:px-2 my-2 hover:transition duration-500`} onClick={()=>setDashBoardAndIndexColor("nft", 2)}><Image  src={settings} alt='' width={20} height={20} /> <p className='text-[10px] font-semibold font-poppins'>Buy & Sell NFTs</p></div>
               
-                </div>
-                <div className=''>
-                        <h1 className='text-[10px] font-semibold font-poppins my-4 text-white'>MARKETPLACE</h1> 
-                          <div className='flex text-gray-300 space-x-4 hover:text-primary-button cursor-pointer hover:bg-black/20 hover:rounded-md hover:scale-125  hover:px-2 my-2 hover:transition duration-500'><Image  src={market} alt='' width={20} height={20} /> <p className='text-[10px] font-semibold font-poppins'>Market</p></div>
-                          <div className='flex text-gray-300 space-x-4 hover:text-primary-button cursor-pointer hover:bg-black/20 hover:rounded-md hover:scale-125  hover:px-2 my-2 hover:transition duration-500'><Image  src={bid} alt='' width={20} height={20} /> <p className='text-[10px] font-semibold font-poppins'>Active Bids</p></div>
-                          <div className='flex text-gray-300 space-x-4 hover:text-primary-button cursor-pointer hover:bg-black/20 hover:rounded-md hover:scale-125  hover:px-2 my-2 hover:transition duration-500'><Image  src={fav} alt='' width={20} height={20} /> <p className='text-[10px] font-semibold font-poppins'>Saved</p></div>
-                         
-                </div>
-                <div className=''>
-                        <h1 className='text-[10px] font-semibold font-poppins my-4 text-white'>PROFILE</h1> 
-                          <div className='flex text-gray-300 space-x-4 hover:text-primary-button cursor-pointer hover:bg-black/20 hover:rounded-md hover:scale-125  hover:px-2 my-2 hover:transition duration-500'><Image  src={collections} alt='' width={20} height={20} /> <p className='text-[10px] font-semibold font-poppins'>Collections</p></div>
-                          <div className='flex text-gray-300 space-x-4 hover:text-primary-button cursor-pointer hover:bg-black/20 hover:rounded-md hover:scale-125  hover:px-2 my-2 hover:transition duration-500'><Image  src={wallet} alt='' width={20} height={20} /> <p className='text-[10px] font-semibold font-poppins'>Wallet</p></div>
+                          <div className={`${indexColor == 3 ? 'bg-black/20 py-2 px-2 text-primary-button' :''} flex text-gray-300 space-x-4 hover:text-primary-button cursor-pointer hover:bg-black/20 hover:rounded-md hover:scale-125 py-2  hover:px-2 my-2 hover:transition duration-500`} onClick={()=>setDashBoardAndIndexColor("collections", 3)}><Image  src={collections} alt='' width={20} height={20} /> <p className='text-[10px] font-semibold font-poppins'>Collections</p></div>
+                          <div className={`${indexColor == 4 ? 'bg-black/20 py-2 px-2 text-primary-button' :''} flex text-gray-300 space-x-4 hover:text-primary-button cursor-pointer hover:bg-black/20 hover:rounded-md hover:scale-125 py-2 hover:px-2 my-2 hover:transition duration-500`} onClick={()=>setDashBoardAndIndexColor("game", 4)}><Image  src={game} alt='' width={20} height={20} /> <p className='text-[10px] font-semibold font-poppins'>Game</p></div>
+                          <div className={`${indexColor == 5 ? 'bg-black/20 py-2 px-2 text-primary-button' :''} flex text-gray-300 space-x-4 hover:text-primary-button cursor-pointer hover:bg-black/20 hover:rounded-md hover:scale-125 py-2 hover:px-2 my-2 hover:transition duration-500`} onClick={()=>setDashBoardAndIndexColor("liquidity", 5)}><Image  src={wallet} alt='' width={20} height={20} /> <p className='text-[10px] font-semibold font-poppins'>Liquidity Provider</p></div>
+
+
+                          
                          
                           
                 </div>

@@ -6,6 +6,10 @@ import MainBar from './components/MainBar';
 import { useEffect, useContext } from 'react';
 import { AppContext } from '@/contextAPI';
 import Dashboard from './dashboard/Dashboard';
+import AddLiquidityModal from './components/modals/AddLiquidityModal';
+import RemoveLiquidityModal from './components/modals/RemoveLiquidityModal';
+import BuyNftModal from './components/modals/BuyNftModal';
+import GameResutModal from './components/modals/GameResutModal';
 
 
 const projectId = "e29303e12e8c37e33e06debf303c4b9e"
@@ -40,10 +44,14 @@ createWeb3Modal({
 
 export default function Home() {
 
-  const {isConnected} = useContext(AppContext)
+  const {isConnected, modalChoices} = useContext(AppContext)
   
   return (
   <main>
+    {modalChoices?.addLiquidityModal && <AddLiquidityModal />}
+    {modalChoices?.removeLiquidityModal && <RemoveLiquidityModal />}
+    {modalChoices?.buyNftLiquidityModal && <BuyNftModal />}
+    {modalChoices?.gameModal && <GameResutModal />}
       
    {!isConnected ? 
    <MainBar /> :
