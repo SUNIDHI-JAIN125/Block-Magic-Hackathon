@@ -1,24 +1,26 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.17;
+pragma solidity ^0.8.17;
 
 import "solmate/tokens/ERC20.sol";
 import "solmate/tokens/ERC721.sol";
 import "openzeppelin/utils/math/Math.sol";
 import "solmate/utils/SafeTransferLib.sol";
-import "solmate/utils/MerkleProofLib.sol";
+import {MerkleProofLib} from "solmate/utils/MerkleProofLib.sol";
 import "openzeppelin/utils/cryptography/MerkleProof.sol";
-
+import {LinkTokenInterface } from "chainlink/src/v0.8/shared/interfaces/LinkTokenInterface.sol";
+import "chainlink/src/v0.8/vrf/VRFV2WrapperConsumerBase.sol";
 import "./LpToken.sol";
-import "./interfaces/IPenguin.sol";
+import  {IPenguin} from"./interfaces/IPenguin.sol";
+import "openzeppelin/utils/structs/EnumerableSet.sol";
 
 /// @title Pair
-/// @author easonnong
+/// @author SUNIDHI-JAIN125
 /// @notice A pair of an NFT and a base token that can be used to create and trade fractionalized NFTs.
-contract Pair is ERC20, ERC721TokenReceiver {
+contract Pair is ERC20, ERC721TokenReceiver,  VRFV2WrapperConsumerBase{
     using SafeTransferLib for address;
     using SafeTransferLib for ERC20;
 
-    uint256 public constant ONE = 1e18;
+    uint256 public constant ONE = 1e18; 
     uint256 public constant CLOSE_GRACE_PERIOD = 7 days;
 
     address public immutable nft; // address of the NFT
@@ -29,6 +31,54 @@ contract Pair is ERC20, ERC721TokenReceiver {
     IPenguin public immutable ringle;
 
     uint256 public closeTimestamp;
+
+    // bytes32 internal keyHash;
+    // uint256 internal fee;
+    // uint256 public randomResult;
+    // address public recentWinner;
+    // mapping(address => uint256) public userGuesses;
+    // mapping(address => uint8) public guessAttempts;
+    mapping(address => uint256) public userGuesses; // Stores user guesses
+    mapping(address => bool) public hasClaimedGuessReward; // Tracks if user claimed reward
+ struct RequestStatus {
+        uint256 paid; // amount paid in link
+        bool fulfilled; // whether the request has been successfully fulfilled
+        uint256[] randomWords;
+    }
+    mapping(uint256 => RequestStatus)
+        public s_requests; /* requestId --> requestStatus */
+
+    // past requests Id.
+    uint256[] public requestIds;
+    uint256 public lastRequestId;
+
+    // Depends on the number of requested values that you want sent to the
+    // fulfillRandomWords() function. Test and adjust
+    // this limit based on the network that you select, the size of the request,
+    // and the processing of the callback request in the fulfillRandomWords()
+    // function.
+    uint32 callbackGasLimit = 25000;
+
+    // The default is 3, but you can set this higher.
+    uint16 requestConfirmations = 3;
+
+    // For this example, retrieve 2 random values in one request.
+    // Cannot exceed VRFV2Wrapper.getConfig().maxNumWords.
+    uint32 numWords = 1;
+
+    // Address LINK - hardcoded for Sepolia
+    address linkAddress = 0x779877A7B0D9E8603169DdbD7836e478b4624789;
+
+    // address WRAPPER - hardcoded for Sepolia
+    address wrapperAddress = 0xab18414CD93297B0d12ac29E63Ca20f515b3DB46;
+
+
+
+    using EnumerableSet for EnumerableSet.AddressSet;
+    EnumerableSet.AddressSet private users;
+
+
+
 
     event Add(
         uint256 baseTokenAmount,
@@ -46,6 +96,14 @@ contract Pair is ERC20, ERC721TokenReceiver {
     event Unwrap(uint256[] tokenIds);
     event Close(uint256 closeTimestamp);
     event Withdraw(uint256 tokenId);
+    // event NewGuess(address indexed user, uint256 guess);
+    event GuessResult(address indexed user, bool isWinner);
+    event RequestSent(uint256 requestId, uint32 numWords);
+    event RequestFulfilled(
+        uint256 requestId,
+        uint256[] randomWords,
+        uint256 payment
+    );
 
     constructor(
         address _nft,
@@ -54,21 +112,115 @@ contract Pair is ERC20, ERC721TokenReceiver {
         string memory pairSymbol,
         string memory nftName,
         string memory nftSymbol
+        // address _vrfCoordinator,
+        // address _linkToken,
+        // bytes32 _keyHash,
+        // uint256 _fee
     )
         ERC20(
             string.concat(nftName, " fractional token"),
             string.concat("f", nftSymbol),
             18
-        )
+        ) 
+        VRFV2WrapperConsumerBase(linkAddress, wrapperAddress)
     {
         nft = _nft;
         baseToken = _baseToken; // use address(0) for native ETH
         merkleRoot = _merkleRoot;
-
         ringle = IPenguin(msg.sender);
-
         lpToken = new LpToken(pairSymbol);
     }
+
+
+function requestRandomWords()
+        external
+        returns (uint256 requestId)
+    {
+        requestId = requestRandomness(
+            callbackGasLimit,
+            requestConfirmations,
+            numWords
+        );
+        s_requests[requestId] = RequestStatus({
+            paid: VRF_V2_WRAPPER.calculateRequestPrice(callbackGasLimit),
+            randomWords: new uint256[](0),
+            fulfilled: false
+        });
+        requestIds.push(requestId);
+        lastRequestId = requestId;
+        emit RequestSent(requestId, numWords);
+        return requestId;
+    }
+
+
+function fulfillRandomWords(
+        uint256 _requestId,
+        uint256[] memory _randomWords
+    ) internal override {
+        require(s_requests[_requestId].paid > 0, "request not found");
+        s_requests[_requestId].fulfilled = true;
+        s_requests[_requestId].randomWords = _randomWords;
+        emit RequestFulfilled(
+            _requestId,
+            _randomWords,
+            s_requests[_requestId].paid
+        );
+
+// Use the random number for the guessing game
+    uint256 randomNumber = _randomWords[0] % 20 + 1; // Modulo by 20 to get a number between 1 and 20
+    checkGuesses(randomNumber);
+    }
+
+
+
+function getRequestStatus(
+        uint256 _requestId
+    )
+        external
+        view
+        returns (uint256 paid, bool fulfilled, uint256[] memory randomWords)
+    {
+        require(s_requests[_requestId].paid > 0, "request not found");
+        RequestStatus memory request = s_requests[_requestId];
+        return (request.paid, request.fulfilled, request.randomWords);
+    }
+
+
+
+function registerUser(address user) public {
+  users.add(user);
+}
+
+
+    function checkGuesses(uint256 randomNumber) internal {
+    for (uint256 i = 0; i < users.length(); i++) {
+    address user = users.at(i);
+    uint256 userGuess = userGuesses[user];
+        if (userGuess > 0 && !hasClaimedGuessReward[user] && userGuess == randomNumber) {
+            // User guessed correctly and hasn't claimed reward yet
+            hasClaimedGuessReward[user] = true;
+            // Send congratulations message (see below)
+            congratsMessage(user);
+        }
+    }
+}
+
+function congratsMessage(address user) internal {
+    // You can implement logic to send a message (on-chain or off-chain)
+    // Here's an example for logging a message on-chain
+    emit GuessResult(user, true);
+}
+    
+
+function withdrawLink() public {
+        LinkTokenInterface link = LinkTokenInterface(linkAddress);
+        require(
+            link.transfer(msg.sender, link.balanceOf(address(this))),
+            "Unable to transfer"
+        );
+    }
+
+
 
     // ******************* //
     //      AMM logic      //
