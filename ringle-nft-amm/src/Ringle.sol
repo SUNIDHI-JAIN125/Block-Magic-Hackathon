@@ -2,7 +2,7 @@
 pragma solidity 0.8.17;
 
 import "./Pair.sol";
-import "lib/SafeERC20Namer.sol";
+import "../lib/SafeERC20Namer.sol";
 import "solmate/auth/Owned.sol";
 
 /// @title ringle nft-amm
