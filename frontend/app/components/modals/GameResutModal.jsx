@@ -6,7 +6,7 @@ import celebrate from '../../../public/lottie/celebrate.json'
 const GameResutModal = () => {
     const {modalChoices, setModalChoices, gameNumber, setGameNumber} = useContext(AppContext)
     return (
-        <div className='fixed grid h-screen z-20 bg-[#7f777790] place-items-center w-full backdrop-blur-sm'>
+        <div className='fixed grid h-screen z-20 bg-[#7f777790] place-items-center w-full backdrop-blur-sm text-white'>
             {gameNumber % 2 == 0 ?<div className="w-1/4 border bg-primary-background h-[300px] rounded-lg flex flex-col justify-center items-center">
                 <Lottie animationData={safFace} loop={true} className="w-2/5"/>
                 <p className='text-[12px]'>Sorry, you failed this time.</p>

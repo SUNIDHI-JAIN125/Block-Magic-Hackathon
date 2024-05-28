@@ -6,7 +6,7 @@ import Image from 'next/image'
 const BuyNftModal = () => {
   const {modalChoices, setModalChoices} = useContext(AppContext)
   return (
-    <div className='fixed grid h-screen z-20 bg-[#7f777790] place-items-center w-full backdrop-blur-sm'>
+    <div className='fixed grid h-screen z-20 bg-[#7f777790] place-items-center w-full backdrop-blur-sm text-white'>
 
       
       
