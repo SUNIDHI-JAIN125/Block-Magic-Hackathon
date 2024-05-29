@@ -8,6 +8,7 @@ import "solmate/utils/SafeTransferLib.sol";
 import {MerkleProofLib} from "solmate/utils/MerkleProofLib.sol";
 import "openzeppelin/utils/cryptography/MerkleProof.sol";
 import {LinkTokenInterface } from "chainlink/src/v0.8/shared/interfaces/LinkTokenInterface.sol";
+import {AutomationCompatibleInterface} from "chainlink/src/v0.8/automation/AutomationCompatible.sol";
 import "chainlink/src/v0.8/vrf/VRFV2WrapperConsumerBase.sol";
 import "./LpToken.sol";
 import  {IPenguin} from"./interfaces/IPenguin.sol";
@@ -16,7 +17,7 @@ import "openzeppelin/utils/structs/EnumerableSet.sol";
 /// @title Pair
 /// @author SUNIDHI-JAIN125
 /// @notice A pair of an NFT and a base token that can be used to create and trade fractionalized NFTs.
-contract Pair is ERC20, ERC721TokenReceiver,  VRFV2WrapperConsumerBase{
+contract Pair is ERC20, ERC721TokenReceiver, VRFV2WrapperConsumerBase,AutomationCompatibleInterface {
     using SafeTransferLib for address;
     using SafeTransferLib for ERC20;
 
@@ -39,7 +40,7 @@ contract Pair is ERC20, ERC721TokenReceiver,  VRFV2WrapperConsumerBase{
     // mapping(address => uint256) public userGuesses;
     // mapping(address => uint8) public guessAttempts;
     mapping(address => uint256) public userGuesses; // Stores user guesses
-    mapping(address => bool) public hasClaimedGuessReward; // Tracks if user claimed reward
+    mapping(address => bool) public hasClaimedGuessNft; // Tracks if user claimed reward
  struct RequestStatus {
         uint256 paid; // amount paid in link
         bool fulfilled; // whether the request has been successfully fulfilled
@@ -51,6 +52,7 @@ contract Pair is ERC20, ERC721TokenReceiver,  VRFV2WrapperConsumerBase{
     // past requests Id.
     uint256[] public requestIds;
     uint256 public lastRequestId;
+   uint256 public immutable tokenId = 1e18; 
 
     // Depends on the number of requested values that you want sent to the
     // fulfillRandomWords() function. Test and adjust
@@ -71,6 +73,7 @@ contract Pair is ERC20, ERC721TokenReceiver,  VRFV2WrapperConsumerBase{
 
     // address WRAPPER - hardcoded for Sepolia
     address wrapperAddress = 0xab18414CD93297B0d12ac29E63Ca20f515b3DB46;
+    
 
 
 
@@ -131,7 +134,6 @@ contract Pair is ERC20, ERC721TokenReceiver,  VRFV2WrapperConsumerBase{
         lpToken = new LpToken(pairSymbol);
     }
 
-
 function requestRandomWords()
         external
         returns (uint256 requestId)
@@ -168,7 +170,7 @@ function fulfillRandomWords(
 
 // Use the random number for the guessing game
     uint256 randomNumber = _randomWords[0] % 20 + 1; // Modulo by 20 to get a number between 1 and 20
-    checkGuesses(randomNumber);
+     processGuesses(randomNumber);
     }
 
 
@@ -192,24 +194,30 @@ function registerUser(address user) public {
 }
 
 
-    function checkGuesses(uint256 randomNumber) internal {
-    for (uint256 i = 0; i < users.length(); i++) {
-    address user = users.at(i);
-    uint256 userGuess = userGuesses[user];
-        if (userGuess > 0 && !hasClaimedGuessReward[user] && userGuess == randomNumber) {
-            // User guessed correctly and hasn't claimed reward yet
-            hasClaimedGuessReward[user] = true;
-            // Send congratulations message (see below)
-            congratsMessage(user);
+
+ function processGuesses(uint256 randomNumber) internal {
+        for (uint256 i = 0; i < users.length(); i++) {
+            address user = users.at(i);
+            uint256 userGuess = userGuesses[user];
+            if (userGuess > 0 && !hasClaimedGuessNft[user] && userGuess == randomNumber) {
+                // User guessed correctly and hasn't claimed nft yet
+                hasClaimedGuessNft[user] = true;
+                distributingFreeNfts(user,tokenId);
+            }
         }
     }
-}
 
-function congratsMessage(address user) internal {
-    // You can implement logic to send a message (on-chain or off-chain)
-    // Here's an example for logging a message on-chain
+function distributingFreeNfts(address user,uint256 tokenId) internal  {
+
+       require(hasClaimedGuessNft[user] == false, "Already claimed");
+        require(ERC721(nft).ownerOf(tokenId) == address(this), "Contract doesn't own the NFT");
+        ERC721(nft).safeTransferFrom(address(this), user, tokenId);
+        hasClaimedGuessNft[user] = true;
     emit GuessResult(user, true);
 }
+
+
+
     
 
 function withdrawLink() public {
@@ -221,6 +229,35 @@ function withdrawLink() public {
     }
 
 
+
+// Chainlink Automation Functions
+
+    function checkUpkeep(bytes calldata /* checkData */)
+        external
+        view
+        override
+        returns (bool upkeepNeeded, bytes memory performData)
+    {
+        // Check if there are users who have won the game and haven't claimed their reward
+        for (uint256 i = 0; i < users.length(); i++) {
+            address user = users.at(i);
+            if (userGuesses[user] > 0 && !hasClaimedGuessNft[user]) {
+                upkeepNeeded = true;
+                performData = abi.encode(user);
+                return (upkeepNeeded,performData);
+            }
+        }
+        upkeepNeeded = false;
+        performData = "";
+    }
+
+    function performUpkeep(bytes calldata performData) external override {
+        address user = abi.decode(performData, (address));
+        // Check if the user has won the game and hasn't claimed their reward
+        if (userGuesses[user] > 0 && !hasClaimedGuessNft[user]) {
+            distributingFreeNfts(user, tokenId);
+        }
+    }
 
     // ******************* //
     //      AMM logic      //
