@@ -13,7 +13,7 @@ contract CreatePairScript is Script {
     function run() public {
         vm.broadcast();
 
-        address ringle = vm.envAddress("PENGUIN_ADDRESS");
+        address ringle = vm.envAddress("RINGLE_ADDRESS");
         address nft = vm.envAddress("NFT_ADDRESS");
 
         create(nft, address(0), "bored-ape-yacht-club.json", ringle);

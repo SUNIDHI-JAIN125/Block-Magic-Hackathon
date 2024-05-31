@@ -8,6 +8,10 @@ gas_reports = ["Pair", "Ringle", "LpToken"]
 fs_permissions = [{ access = "read", path = "./script/rankings/"}]
 ffi = true
 
+
+[rpc_endpoints]
+sepolia = "https://rpc-sepolia.rockx.com"
+
 [fmt]
 line_length = 120       # format line length
 

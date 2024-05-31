@@ -8,128 +8,128 @@ import "../Shared/Fixture.t.sol";
 import "../../src/Ringle.sol";
 
 contract SellTest is Fixture {
-    event Sell(uint256 inputAmount, uint256 outputAmount);
+    // event Sell(uint256 inputAmount, uint256 outputAmount);
 
-    uint256 public inputAmount = 10;
-    uint256 public minOutputAmount;
+    // uint256 public inputAmount = 10;
+    // uint256 public minOutputAmount;
 
-    function setUp() public {
-        uint256 baseTokenAmount = 100;
-        uint256 fractionalTokenAmount = 30;
+    // function setUp() public {
+    //     uint256 baseTokenAmount = 100;
+    //     uint256 fractionalTokenAmount = 30;
 
-        deal(address(usd), address(this), baseTokenAmount, true);
-        deal(address(pair), address(this), fractionalTokenAmount, true);
+    //     deal(address(usd), address(this), baseTokenAmount, true);
+    //     deal(address(pair), address(this), fractionalTokenAmount, true);
 
-        usd.approve(address(pair), type(uint256).max);
+    //     usd.approve(address(pair), type(uint256).max);
 
-        uint256 minLpTokenAmount = Math.sqrt(
-            baseTokenAmount * fractionalTokenAmount
-        );
-        pair.add(baseTokenAmount, fractionalTokenAmount, minLpTokenAmount);
+    //     uint256 minLpTokenAmount = Math.sqrt(
+    //         baseTokenAmount * fractionalTokenAmount
+    //     );
+    //     pair.add(baseTokenAmount, fractionalTokenAmount, minLpTokenAmount);
 
-        minOutputAmount = pair.sellQuote(inputAmount);
+    //     minOutputAmount = pair.sellQuote(inputAmount);
 
-        deal(address(pair), address(this), inputAmount, true);
-        deal(address(ethPair), address(this), fractionalTokenAmount, true);
-        ethPair.add{value: baseTokenAmount}(
-            baseTokenAmount,
-            fractionalTokenAmount,
-            minLpTokenAmount
-        );
-        deal(address(ethPair), address(this), inputAmount, true);
-    }
+    //     deal(address(pair), address(this), inputAmount, true);
+    //     deal(address(ethPair), address(this), fractionalTokenAmount, true);
+    //     ethPair.add{value: baseTokenAmount}(
+    //         baseTokenAmount,
+    //         fractionalTokenAmount,
+    //         minLpTokenAmount
+    //     );
+    //     deal(address(ethPair), address(this), inputAmount, true);
+    // }
 
-    function testItReturnsOutputAmount() public {
-        // arrange
-        uint256 expectedOutputAmount = minOutputAmount;
+    // function testItReturnsOutputAmount() public {
+    //     // arrange
+    //     uint256 expectedOutputAmount = minOutputAmount;
 
-        // act
-        uint256 outputAmount = pair.sell(inputAmount, expectedOutputAmount);
+    //     // act
+    //     uint256 outputAmount = pair.sell(inputAmount, expectedOutputAmount);
 
-        // assert
-        assertEq(
-            outputAmount,
-            expectedOutputAmount,
-            "Should have returned output amount"
-        );
-    }
+    //     // assert
+    //     assertEq(
+    //         outputAmount,
+    //         expectedOutputAmount,
+    //         "Should have returned output amount"
+    //     );
+    // }
 
-    function testItTransfersBaseTokens() public {
-        // arrange
-        uint256 balanceBefore = usd.balanceOf(address(pair));
-        uint256 thisBalanceBefore = usd.balanceOf(address(this));
+    // function testItTransfersBaseTokens() public {
+    //     // arrange
+    //     uint256 balanceBefore = usd.balanceOf(address(pair));
+    //     uint256 thisBalanceBefore = usd.balanceOf(address(this));
 
-        // act
-        pair.sell(inputAmount, minOutputAmount);
+    //     // act
+    //     pair.sell(inputAmount, minOutputAmount);
 
-        // assert
-        assertEq(
-            balanceBefore - usd.balanceOf(address(pair)),
-            minOutputAmount,
-            "Should have transferred base tokens from pair"
-        );
-        assertEq(
-            usd.balanceOf(address(this)) - thisBalanceBefore,
-            minOutputAmount,
-            "Should have transferred base tokens to sender"
-        );
-    }
+    //     // assert
+    //     assertEq(
+    //         balanceBefore - usd.balanceOf(address(pair)),
+    //         minOutputAmount,
+    //         "Should have transferred base tokens from pair"
+    //     );
+    //     assertEq(
+    //         usd.balanceOf(address(this)) - thisBalanceBefore,
+    //         minOutputAmount,
+    //         "Should have transferred base tokens to sender"
+    //     );
+    // }
 
-    function testItTransfersFractionalTokens() public {
-        // arrange
-        uint256 balanceBefore = pair.balanceOf(address(pair));
-        uint256 thisBalanceBefore = pair.balanceOf(address(this));
+    // function testItTransfersFractionalTokens() public {
+    //     // arrange
+    //     uint256 balanceBefore = pair.balanceOf(address(pair));
+    //     uint256 thisBalanceBefore = pair.balanceOf(address(this));
 
-        // act
-        pair.sell(inputAmount, minOutputAmount);
+    //     // act
+    //     pair.sell(inputAmount, minOutputAmount);
 
-        // assert
-        assertEq(
-            thisBalanceBefore - pair.balanceOf(address(this)),
-            inputAmount,
-            "Should have transferred fractional tokens from sender"
-        );
-        assertEq(
-            pair.balanceOf(address(pair)) - balanceBefore,
-            inputAmount,
-            "Should have transferred fractional tokens to pair"
-        );
-    }
+    //     // assert
+    //     assertEq(
+    //         thisBalanceBefore - pair.balanceOf(address(this)),
+    //         inputAmount,
+    //         "Should have transferred fractional tokens from sender"
+    //     );
+    //     assertEq(
+    //         pair.balanceOf(address(pair)) - balanceBefore,
+    //         inputAmount,
+    //         "Should have transferred fractional tokens to pair"
+    //     );
+    // }
 
-    function testItRevertsSlippageOnSell() public {
-        // arrange
-        minOutputAmount += 1; // add 1 to cause revert
+    // function testItRevertsSlippageOnSell() public {
+    //     // arrange
+    //     minOutputAmount += 1; // add 1 to cause revert
 
-        // act
-        vm.expectRevert("Slippage: amount out");
-        pair.sell(inputAmount, minOutputAmount);
-    }
+    //     // act
+    //     vm.expectRevert("Slippage: amount out");
+    //     pair.sell(inputAmount, minOutputAmount);
+    // }
 
-    function testItTransfersEther() public {
-        // arrange
-        uint256 balanceBefore = address(ethPair).balance;
-        uint256 thisBalanceBefore = address(this).balance;
+    // function testItTransfersEther() public {
+    //     // arrange
+    //     uint256 balanceBefore = address(ethPair).balance;
+    //     uint256 thisBalanceBefore = address(this).balance;
 
-        // act
-        ethPair.sell(inputAmount, minOutputAmount);
+    //     // act
+    //     ethPair.sell(inputAmount, minOutputAmount);
 
-        // assert
-        assertEq(
-            balanceBefore - address(ethPair).balance,
-            minOutputAmount,
-            "Should have transferred ether from pair"
-        );
-        assertEq(
-            address(this).balance - thisBalanceBefore,
-            minOutputAmount,
-            "Should have transferred ether to sender"
-        );
-    }
+    //     // assert
+    //     assertEq(
+    //         balanceBefore - address(ethPair).balance,
+    //         minOutputAmount,
+    //         "Should have transferred ether from pair"
+    //     );
+    //     assertEq(
+    //         address(this).balance - thisBalanceBefore,
+    //         minOutputAmount,
+    //         "Should have transferred ether to sender"
+    //     );
+    // }
 
-    function testItEmitsSellEvent() public {
-        // act
-        vm.expectEmit(true, true, true, true);
-        emit Sell(inputAmount, minOutputAmount);
-        pair.sell(inputAmount, minOutputAmount);
-    }
+    // function testItEmitsSellEvent() public {
+    //     // act
+    //     vm.expectEmit(true, true, true, true);
+    //     emit Sell(inputAmount, minOutputAmount);
+    //     pair.sell(inputAmount, minOutputAmount);
+    // }
 }

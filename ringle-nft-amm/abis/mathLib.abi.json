@@ -1,0 +1,141 @@
+{
+    "abi": [
+        {
+            "type": "function",
+            "name": "addQuote",
+            "inputs": [
+                {
+                    "name": "baseTokenAmount",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "fractionalTokenAmount",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "baseTokenReserves",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "fractionalTokenReserves",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "lpTokenSupply",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "stateMutability": "pure"
+        },
+        {
+            "type": "function",
+            "name": "buyQuote",
+            "inputs": [
+                {
+                    "name": "outputAmount",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "baseTokenReserves",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "fractionalTokenReserves",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "stateMutability": "pure"
+        },
+        {
+            "type": "function",
+            "name": "removeQuote",
+            "inputs": [
+                {
+                    "name": "lpTokenAmount",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "baseTokenReserves",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "fractionalTokenReserves",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "lpTokenSupply",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "stateMutability": "pure"
+        },
+        {
+            "type": "function",
+            "name": "sellQuote",
+            "inputs": [
+                {
+                    "name": "inputAmount",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "baseTokenReserves",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "fractionalTokenReserves",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "stateMutability": "pure"
+        }
+    ]
+}
+    
