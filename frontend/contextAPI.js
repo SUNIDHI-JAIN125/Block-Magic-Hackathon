@@ -65,6 +65,7 @@ export const AppContextProvider = ({ children }) => {
   }
 
 
+  
   const removeLiquidity = async (lpTokenAmount, minBaseTokenOutputAmount, minFractionalTokenOutputAmount) => {
     try {
       const signer = await getSigner()
