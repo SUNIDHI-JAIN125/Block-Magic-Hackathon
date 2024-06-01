@@ -1,5 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react'
 import { AppContext } from '@/contextAPI'
+import { ethers } from 'ethers'
+
 
 const AddLiquidityModal = () => {
     const {modalChoices, setModalChoices,addLiquidity,removeLiquidity} = useContext(AppContext)

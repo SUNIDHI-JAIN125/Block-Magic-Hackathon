@@ -43,12 +43,18 @@ export const AppContextProvider = ({ children }) => {
 
 
   const addLiquidity = async (baseTokenAmount, fractionalTokenAmount, minLpTokenAmount) => {
+    console.log(baseTokenAmount, fractionalTokenAmount, minLpTokenAmount, "SLIPP")
     try {
       const signer = await getSigner()
       console.log(signer, pairContractAddress, pairABI)
       const initContract = initializeContract(pairContractAddress, pairABI, signer)
-      console.log(initContract, "CONTRACT")
-      const tx = await initContract.add(baseTokenAmount, fractionalTokenAmount, minLpTokenAmount);
+
+      const baseToken  = ethers.utils.parseUnits(baseTokenAmount?.toString(), 18);
+      const fractionalToken  = ethers.utils.parseUnits(fractionalTokenAmount?.toString(), 18);
+      const lpToken  = ethers.utils.parseUnits(minLpTokenAmount?.toString(), 18);
+
+      const tx = await initContract.add(baseToken, fractionalToken, lpToken);
+
       await tx.wait();
       console.log("Liquidity added successfully");
 
