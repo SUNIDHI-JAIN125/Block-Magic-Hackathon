@@ -5,7 +5,7 @@ import {Pair} from "./Pair.sol";
 import {SafeERC20Namer} from "../lib/SafeERC20Namer.sol";
 
     /// @title ringle nft-amm
-    /// @author sunidhi
+    /// @author SUNIDHI-JAIN125
     /// @notice An AMM for creating and trading fractionalized NFTs.
     contract Ringle is Owned {
         using SafeERC20Namer for address;
@@ -17,7 +17,7 @@ import {SafeERC20Namer} from "../lib/SafeERC20Namer.sol";
         /// @param nft The NFT contract address.
         /// @param baseToken The base token contract address.
         /// @param merkleRoot The merkle root for the valid tokenIds.
-        event Create(
+        event Create(   
             address indexed nft,
             address indexed baseToken,
             bytes32 indexed merkleRoot

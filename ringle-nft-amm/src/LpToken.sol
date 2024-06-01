@@ -5,7 +5,7 @@ import "solmate/auth/Owned.sol";
 import "solmate/tokens/ERC20.sol";
 
 /// @title LP token
-/// @author easonnong
+/// @author SUNIDHI-JAIN125
 /// @notice LP token which is minted and burned by the Pair contract to represent liquidity in the pool.
 contract LpToken is Owned, ERC20 {
     constructor(

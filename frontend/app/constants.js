@@ -10,9 +10,9 @@ export const pairABI = PairContractABI
 export const ringleABI = RingleContractABI
 export const mathLibABI = MathLibContractABI
 
-export const ringleContractAddress = ""
+export const ringleContractAddress = "0xdd633270def2fd9086a646261652d31bc8c1cfe6"
 export const pairContractAddress = "0xdd633270def2fd9086a646261652d31bc8c1cfe6"
-export const mathLibContractAddress = ""
+export const mathLibContractAddress = "0x4590ca3ce4acc2a7e915d2293fcfd86319481f27"
 
 
 export const mainnet = {
@@ -32,7 +32,7 @@ export const Sepolia = {
     name: 'Sepolia Testnet',
     currency: 'ETH',
     explorerUrl: 'https://sepolia.etherscan.io/',
-    rpcUrl: 'https://rpc.sepolia.org'
+    rpcUrl: 'https://rpc-sepolia.rockx.com'
 
 }
 

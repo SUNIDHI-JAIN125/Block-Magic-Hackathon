@@ -6,14 +6,10 @@ import { Sepolia, pairABI, pairContractAddress } from './app/constants';
 
 export const AppContext = React.createContext();
 
-
-
 export const AppContextProvider = ({ children }) => {
   const { address, chainId, isConnected } = useWeb3ModalAccount()
   const { walletProvider } = useWeb3ModalProvider()
   const [gameNumber, setGameNumber] = useState(0)
-  console.log(pairContractAddress, pairABI, "ABIIIIIIIIII")
-
   const [dashBoardState, setDashBoardState] = useState("home")
   const [modalChoices, setModalChoices] = useState({
     addLiquidityModal: false,
@@ -22,7 +18,6 @@ export const AppContextProvider = ({ children }) => {
     gameModal: false
   })
 
-
   const initializeContract = (contractAddress, contractABI, signerOrProvider) => new ethers.Contract(
     contractAddress,
     contractABI,
@@ -30,7 +25,6 @@ export const AppContextProvider = ({ children }) => {
   )
 
   const getSigner = async () => {
-    // if (!isConnected) return toast.error('Wallet not connected')
     const ethersProvider = new ethers.BrowserProvider(walletProvider)
     const signer = await ethersProvider.getSigner()
     return signer
@@ -41,67 +35,54 @@ export const AppContextProvider = ({ children }) => {
     return provider
   }
 
-
   const addLiquidity = async (baseTokenAmount, fractionalTokenAmount, minLpTokenAmount) => {
-    console.log(baseTokenAmount, fractionalTokenAmount, minLpTokenAmount, "SLIPP")
     try {
       const signer = await getSigner()
-      console.log(signer, pairContractAddress, pairABI)
       const initContract = initializeContract(pairContractAddress, pairABI, signer)
+    
+      const baseToken = ethers.parseUnits(baseTokenAmount, 18);
+      const fractionalToken =  ethers.parseUnits(fractionalTokenAmount, 18);
+      const lpToken = ethers.parseUnits(minLpTokenAmount, 18);
+      console.log(baseToken,fractionalToken,lpToken);
 
-      const baseToken  = ethers.utils.parseUnits(baseTokenAmount?.toString(), 18);
-      const fractionalToken  = ethers.utils.parseUnits(fractionalTokenAmount?.toString(), 18);
-      const lpToken  = ethers.utils.parseUnits(minLpTokenAmount?.toString(), 18);
-
-      const tx = await initContract.add(baseToken, fractionalToken, lpToken);
-
+      const tx = await initContract.add(baseToken, fractionalToken, lpToken,  {
+        gasLimit: 3000000
+      });
       await tx.wait();
       console.log("Liquidity added successfully");
 
     } catch (error) {
       console.log(error, "Add liquidity error")
-
     }
   }
 
-
-  
   const removeLiquidity = async (lpTokenAmount, minBaseTokenOutputAmount, minFractionalTokenOutputAmount) => {
     try {
       const signer = await getSigner()
       const initContract = initializeContract(pairContractAddress, pairABI, signer)
       const tx = await initContract.remove(minBaseTokenOutputAmount, minFractionalTokenOutputAmount, lpTokenAmount);
       await tx.wait();
-      console.log("Liquidity added successfully");
+      console.log("Liquidity removed successfully");
 
     } catch (error) {
-      console.log(error, "Add liquidity error")
-
+      console.log(error, "Remove liquidity error")
     }
-
   }
 
   return (
-    <>
-      <AppContext.Provider value={{
-        isConnected,
-        walletProvider,
-        dashBoardState,
-        setDashBoardState,
-        modalChoices,
-        setModalChoices,
-        gameNumber,
-        setGameNumber,
-        addLiquidity,
-        removeLiquidity
-
-      }} >
-        {children}
-      </AppContext.Provider>
-    </>
+    <AppContext.Provider value={{
+      isConnected,
+      walletProvider,
+      dashBoardState,
+      setDashBoardState,
+      modalChoices,
+      setModalChoices,
+      gameNumber,
+      setGameNumber,
+      addLiquidity,
+      removeLiquidity
+    }}>
+      {children}
+    </AppContext.Provider>
   )
-
-
-
-
-}   
+}
