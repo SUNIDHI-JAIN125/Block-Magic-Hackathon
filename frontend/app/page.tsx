@@ -1,7 +1,7 @@
 'use client'
 
-import { createWeb3Modal, defaultConfig } from '@web3modal/ethers5/react';
-import {morphSepolia, mainnet} from '../app/constants';
+import { createWeb3Modal, defaultConfig } from '@web3modal/ethers/react';
+import {mainnet, Sepolia} from '../app/constants';
 import MainBar from './components/MainBar';
 import { useEffect, useContext } from 'react';
 import { AppContext } from '@/contextAPI';
@@ -37,7 +37,7 @@ const ethersConfig = defaultConfig({
 
 createWeb3Modal({
   ethersConfig,
-  chains: [morphSepolia, mainnet],
+  chains: [mainnet, Sepolia],
   projectId,
   enableAnalytics: true // Optional - defaults to your Cloud configuration
 })

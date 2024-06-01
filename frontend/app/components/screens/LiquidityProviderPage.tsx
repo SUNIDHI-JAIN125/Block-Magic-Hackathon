@@ -3,7 +3,7 @@ import { AppContext } from '@/contextAPI'
 
 const LiquidityProviderPage = () => {
 
-     const {modalChoices, setModalChoices} = useContext(AppContext)
+     const {modalChoices, setModalChoices,} = useContext(AppContext)
 
   return (
     <div className='py-4 px-4 bg-primary-background h-full shadow-2xl'>

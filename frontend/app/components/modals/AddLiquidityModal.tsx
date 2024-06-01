@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react'
 import { AppContext } from '@/contextAPI'
 
 const AddLiquidityModal = () => {
-    const {modalChoices, setModalChoices} = useContext(AppContext)
+    const {modalChoices, setModalChoices,addLiquidity,removeLiquidity} = useContext(AppContext)
     const [formData, setFormData] = useState({
         baseToken:"ETH",
         quoteToken:"USDT",
@@ -15,6 +15,11 @@ const AddLiquidityModal = () => {
         setFormData({...formData,  [e.target.name]: e.target.value  })
         
        
+        
+    }
+
+    const handleAddLiquidity = async () => {
+        await addLiquidity(formData?.baseTokenAmount, formData?.quoteTokenAmount, 2 )
     }
 
     useEffect(() => {
@@ -62,7 +67,7 @@ const AddLiquidityModal = () => {
 
             </div>
             <div className='px-4'>
-            <button className='bg-primary-button px-4 py-2 rounded-sm font-poppins flex w-full justify-center'> Add Liquidity</button>
+            <button className='bg-primary-button px-4 py-2 rounded-sm font-poppins flex w-full justify-center' onClick={()=> handleAddLiquidity()}> Add Liquidity</button>
             </div>
         </div>
       
