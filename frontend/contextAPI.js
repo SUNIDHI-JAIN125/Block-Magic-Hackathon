@@ -48,23 +48,19 @@ export const AppContextProvider = ({ children }) => {
   }
 
 
-  const buy = async (inputAmount, minOutputAmount, token) => {
+  const buy = async (tokenId, maxInputAmount) => {
     try {
       const signer = await getSigner();
       const initContract = initializeContract(pairContractAddress, pairABI, signer);
+      
+      let tokenIds= []
+      tokenIds.push(tokenId);
+      console.log(tokenIds,maxInputAmount);
+       const  inputAmount= await initContract.nftBuy(tokenIds, maxInputAmount, {gasLimit:300000});
+     
 
-      const input = ethers.parseUnits(inputAmount, 18);
-      const minOutput = ethers.parseUnits(minOutputAmount, 18);
-
-      let tx;
-      if (token === 'baseToken') {
-        tx = await initContract.buy(input, minOutput, { value: input, gasLimit: 30000 });
-      } else {
-        tx = await initContract.buy(input, minOutput, { gasLimit: 30000 });
-      }
-
-      console.log(tx);
-      await tx.wait();
+      console.log(inputAmount);
+      // await tx.wait();
       console.log("NFT purchased successfully");
 
     } catch (error) {
@@ -72,6 +68,28 @@ export const AppContextProvider = ({ children }) => {
     }
   };
 
+
+  const sellNft = async (tokenId,minOutputAmount, proof ) => {
+    try {
+      const signer = await getSigner();
+      const initContract = initializeContract(pairContractAddress, pairABI, signer);
+      
+      let tokenIds= []
+      let proofs = [];
+      proofs.push(proof);
+      tokenIds.push(tokenId);
+      console.log(tokenIds,minOutputAmount,proof);
+       const  outputAmount= await initContract.nftSell(tokenIds,minOutputAmount,proofs, {gasLimit:300000});
+     
+
+      console.log(outputAmount);
+      // await tx.wait();
+      console.log("NFT selled successfully");
+
+    } catch (error) {
+      console.log(error, "Sell error");
+    }
+  };
 
 
   const showOwner = async () => {
@@ -82,8 +100,8 @@ export const AppContextProvider = ({ children }) => {
       const owner= await ringleContract.owner();
       console.log(owner);
 
-      const address = await ringleContract.pairs('0x846AF542138F8194cdC5d2Fa7df92AEEb20a9F25','0x0000000000000000000000000000000000000000',	'0x894692c90a28cc4bf849bff8a532a09bb3b8e9717f038e677739666def3ba784');
-      console.log(" this is pair"  + address);
+      // const address = await ringleContract.pairs('0x846AF542138F8194cdC5d2Fa7df92AEEb20a9F25','0x0000000000000000000000000000000000000000',	'0x894692c90a28cc4bf849bff8a532a09bb3b8e9717f038e677739666def3ba784');
+      // console.log(" this is pair"  + address);
 
 
       const NFTContract = initializeNFT(mintedNftContractAddress, mintednftABI, signer);
@@ -92,6 +110,12 @@ export const AppContextProvider = ({ children }) => {
       const nftaddress= await NFTContract.ownerOf(1499);
       console.log("Token id 1499 nft :", nftaddress);
 
+      const nfttokenuri= await NFTContract.tokenURI(1499);
+      console.log("Token uri  :", nfttokenuri);
+      const nftname= await NFTContract.name();
+      console.log("Token name  :", nftname);
+      const nftsymbol= await NFTContract.symbol();
+      console.log("Token symbol  :", nftsymbol);
 
       const totalSupply = await NFTContract.totalSupply();
       console.log('Total Supply of NFTs:', totalSupply.toString());
@@ -117,6 +141,7 @@ export const AppContextProvider = ({ children }) => {
       gameNumber,
       setGameNumber,
       buy,
+      sellNft,
       showOwner
     }}>
       {children}
