@@ -17,7 +17,7 @@ const AddLiquidityModal = () => {
     };
 
     const handleAddLiquidity = async () => {
-        await addLiquidity(formData.baseTokenAmount, formData.quoteTokenAmount, "300");
+        await addLiquidity(formData.baseTokenAmount, formData.quoteTokenAmount, "2");
     };
 
     useEffect(() => {}, [setFormData]); 

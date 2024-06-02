@@ -2,7 +2,7 @@
 import { useWeb3ModalProvider, useWeb3ModalAccount } from '@web3modal/ethers/react'
 import { ethers } from 'ethers'
 import React, { useState, useEffect } from "react";
-import { Sepolia, pairABI, pairContractAddress } from './app/constants';
+import { Sepolia, pairABI, pairContractAddress, ringleABI,ringleContractAddress,mintedNftContractAddress,mintednftABI} from './app/constants';
 
 export const AppContext = React.createContext();
 
@@ -15,7 +15,7 @@ export const AppContextProvider = ({ children }) => {
     addLiquidityModal: false,
     removeLiquidityModal: false,
     buyNftLiquidityModal: false,
-    gameModal: false
+    gameModal: false,
   })
 
   const initializeContract = (contractAddress, contractABI, signerOrProvider) => new ethers.Contract(
@@ -23,6 +23,20 @@ export const AppContextProvider = ({ children }) => {
     contractABI,
     signerOrProvider
   )
+
+  const initializeRingle = (contractAddress, contractABI, signerOrProvider) => new ethers.Contract(
+    contractAddress,
+    contractABI,
+    signerOrProvider
+  )
+
+
+  const  initializeNFT = (contractAddress, contractABI, signerOrProvider) => new ethers.Contract(
+    contractAddress,
+    contractABI,
+    signerOrProvider
+  )
+
 
   const getSigner = async () => {
     const ethersProvider = new ethers.BrowserProvider(walletProvider)
@@ -45,11 +59,15 @@ export const AppContextProvider = ({ children }) => {
       const lpToken = ethers.parseUnits(minLpTokenAmount, 18);
       console.log(baseToken,fractionalToken,lpToken);
 
-      const tx = await initContract.add(baseToken, fractionalToken, lpToken,  {
-        gasLimit: 3000000
-      });
-      await tx.wait();
-      console.log("Liquidity added successfully");
+
+      const time = await initContract.name();
+      console.log(time);
+      // const tx = await initContract.add(baseToken, fractionalToken, lpToken,  {
+      //   gasLimit: 3000000
+      // });
+      // await tx.wait();
+      // console.log(tx);  
+      // console.log("Liquidity added successfully");
 
     } catch (error) {
       console.log(error, "Add liquidity error")
@@ -69,6 +87,63 @@ export const AppContextProvider = ({ children }) => {
     }
   }
 
+
+
+
+  const buy = async (inputAmount, minOutputAmount, token) => {
+    try {
+      const signer = await getSigner();
+      const initContract = initializeContract(pairContractAddress, pairABI, signer);
+
+      const input = ethers.parseUnits(inputAmount, 18);
+      const minOutput = ethers.parseUnits(minOutputAmount, 18);
+
+      let tx;
+      if (token === 'baseToken') {
+        tx = await initContract.buy(input, minOutput, { value: input, gasLimit: 30000 });
+      } else {
+        tx = await initContract.buy(input, minOutput, { gasLimit: 30000 });
+      }
+
+      console.log(tx);
+      await tx.wait();
+      console.log("NFT purchased successfully");
+
+    } catch (error) {
+      console.log(error, "Buy error");
+    }
+  };
+
+
+
+  const showOwner = async () => {
+    try {
+      const signer = await getSigner();
+      const ringleContract = initializeRingle(ringleContractAddress, ringleABI, signer);
+
+      const owner= await ringleContract.owner();
+      console.log(owner);
+
+      const NFTContract = initializeNFT(mintedNftContractAddress, mintednftABI, signer);
+
+    
+      const nftaddress= await NFTContract.ownerOf(1499);
+      console.log("Token id 1499 nft :", nftaddress);
+
+
+      const totalSupply = await NFTContract.totalSupply();
+      console.log('Total Supply of NFTs:', totalSupply.toString());
+
+    } catch (error) {
+      console.log(error, "Can't Get The Owner");
+    }
+  };
+
+  showOwner();
+
+
+
+
   return (
     <AppContext.Provider value={{
       isConnected,
@@ -80,7 +155,9 @@ export const AppContextProvider = ({ children }) => {
       gameNumber,
       setGameNumber,
       addLiquidity,
-      removeLiquidity
+      removeLiquidity,
+      buy,
+      showOwner
     }}>
       {children}
     </AppContext.Provider>
