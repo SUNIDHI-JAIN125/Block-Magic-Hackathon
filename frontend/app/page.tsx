@@ -6,8 +6,6 @@ import MainBar from './components/MainBar';
 import { useEffect, useContext } from 'react';
 import { AppContext } from '@/contextAPI';
 import Dashboard from './dashboard/Dashboard';
-import AddLiquidityModal from './components/modals/AddLiquidityModal';
-import RemoveLiquidityModal from './components/modals/RemoveLiquidityModal';
 import BuyNftModal from './components/modals/BuyNftModal';
 import GameResutModal from './components/modals/GameResutModal';
 
@@ -48,8 +46,6 @@ export default function Home() {
   
   return (
   <main>
-    {modalChoices?.addLiquidityModal && <AddLiquidityModal />}
-    {modalChoices?.removeLiquidityModal && <RemoveLiquidityModal />}
     {modalChoices?.buyNftLiquidityModal && <BuyNftModal />}
     {modalChoices?.gameModal && <GameResutModal />}
       

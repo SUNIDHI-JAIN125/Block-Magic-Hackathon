@@ -12,8 +12,6 @@ export const AppContextProvider = ({ children }) => {
   const [gameNumber, setGameNumber] = useState(0)
   const [dashBoardState, setDashBoardState] = useState("home")
   const [modalChoices, setModalChoices] = useState({
-    addLiquidityModal: false,
-    removeLiquidityModal: false,
     buyNftLiquidityModal: false,
     gameModal: false,
   })
@@ -48,46 +46,6 @@ export const AppContextProvider = ({ children }) => {
     const provider = new ethers.JsonRpcProvider(Sepolia?.rpcUrl)
     return provider
   }
-
-  const addLiquidity = async (baseTokenAmount, fractionalTokenAmount, minLpTokenAmount) => {
-    try {
-      const signer = await getSigner()
-      const initContract = initializeContract(pairContractAddress, pairABI, signer)
-    
-      const baseToken = ethers.parseUnits(baseTokenAmount, 18);
-      const fractionalToken =  ethers.parseUnits(fractionalTokenAmount, 18);
-      const lpToken = ethers.parseUnits(minLpTokenAmount, 18);
-      console.log(baseToken,fractionalToken,lpToken);
-
-
-      const time = await initContract.name();
-      console.log(time);
-      // const tx = await initContract.add(baseToken, fractionalToken, lpToken,  {
-      //   gasLimit: 3000000
-      // });
-      // await tx.wait();
-      // console.log(tx);  
-      // console.log("Liquidity added successfully");
-
-    } catch (error) {
-      console.log(error, "Add liquidity error")
-    }
-  }
-
-  const removeLiquidity = async (lpTokenAmount, minBaseTokenOutputAmount, minFractionalTokenOutputAmount) => {
-    try {
-      const signer = await getSigner()
-      const initContract = initializeContract(pairContractAddress, pairABI, signer)
-      const tx = await initContract.remove(minBaseTokenOutputAmount, minFractionalTokenOutputAmount, lpTokenAmount);
-      await tx.wait();
-      console.log("Liquidity removed successfully");
-
-    } catch (error) {
-      console.log(error, "Remove liquidity error")
-    }
-  }
-
-
 
 
   const buy = async (inputAmount, minOutputAmount, token) => {
@@ -124,6 +82,10 @@ export const AppContextProvider = ({ children }) => {
       const owner= await ringleContract.owner();
       console.log(owner);
 
+      const address = await ringleContract.pairs('0x846AF542138F8194cdC5d2Fa7df92AEEb20a9F25','0x0000000000000000000000000000000000000000',	'0x894692c90a28cc4bf849bff8a532a09bb3b8e9717f038e677739666def3ba784');
+      console.log(" this is pair"  + address);
+
+
       const NFTContract = initializeNFT(mintedNftContractAddress, mintednftABI, signer);
 
     
@@ -154,8 +116,6 @@ export const AppContextProvider = ({ children }) => {
       setModalChoices,
       gameNumber,
       setGameNumber,
-      addLiquidity,
-      removeLiquidity,
       buy,
       showOwner
     }}>

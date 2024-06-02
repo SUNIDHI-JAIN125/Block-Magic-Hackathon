@@ -13,7 +13,7 @@ export const mathLibABI = MathLibContractABI
 export const mintednftABI = MintedNFTABI
 
 export const ringleContractAddress = "0xdd633270def2fd9086a646261652d31bc8c1cfe6"
-export const pairContractAddress = "0xdd633270def2fd9086a646261652d31bc8c1cfe6"
+export const pairContractAddress = "0x02595E42d72FD6347d989f4C24232DeFdF97623D"
 export const mathLibContractAddress = "0x4590ca3ce4acc2a7e915d2293fcfd86319481f27"
 export const mintedNftContractAddress = "0x846af542138f8194cdc5d2fa7df92aeeb20a9f25"
 
