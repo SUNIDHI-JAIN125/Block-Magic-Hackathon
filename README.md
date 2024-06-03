@@ -2,18 +2,22 @@
 
 The rapid evolution of decentralized finance (DeFi) has brought significant attention to the potential of NFTs (Non-Fungible Tokens). However, the NFT market faces challenges such as liquidity, price discovery, and providing a seamless trading experience. Inspired by the principles of Automated Market Makers (AMM) and the need to integrate robust financial tools, we set out to create Ringle, a platform that addresses these challenges and enhances the trading experience for NFTs.
 
+
 ### Getting Started
 This project is submitted to the BlockMagic Chainlink Hackathon, details of the same can be seen here - 
 Frontend Deployment - https://block-magic-hackathon.vercel.app/
 
 ## 🚀 **Setting Up the Project Locally**
 
+
 ### Prerequisites
 Node.js (v14 or later)
 Yarn or npm
 Foundry (for smart contract development)
 
+
 ### Installation
+
 
 1. **Clone the repository:**
    ```bash
@@ -51,7 +55,9 @@ Foundry (for smart contract development)
  
 
 ## Links to Smart Contract Addresses
+
 Our Platform is deployed on Polygon Cardona(zkEVM) Testnet and Sepolia Testnet
+
 
 ## Polygon 
 
@@ -62,13 +68,20 @@ Our Platform is deployed on Polygon Cardona(zkEVM) Testnet and Sepolia Testnet
   Pair.sol = 0x94f482033A5284F91a2a3Cd813474B91dB32a210
   
   explorerUrl: [Visit Polygon Explorer](https://cardona-zkevm.polygonscan.com)
+
+  
   
 ## Sepolia Testnet
 
+
   NFT__MINTED_ADDRESS= 0x846af542138f8194cdc5d2fa7df92aeeb20a9f25
+  
   Ringle.sol = 0xdd633270def2fd9086a646261652d31bc8c1cfe6
+  
   Pair.sol = 0x02595E42d72FD6347d989f4C24232DeFdF97623D
+  
   explorerUrl: [Visit Sepolia EtherScan](https://sepolia.etherscan.io/)
+
    
   
 
