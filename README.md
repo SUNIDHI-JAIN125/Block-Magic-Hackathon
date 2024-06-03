@@ -1,64 +1,66 @@
-# Ringle: NFT Automated Market Maker (AMM) DeFi Platform
+# Ringle: NFT Automated Market Maker (AMM) 
 
-## 👻 **Inspiration**
 The rapid evolution of decentralized finance (DeFi) has brought significant attention to the potential of NFTs (Non-Fungible Tokens). However, the NFT market faces challenges such as liquidity, price discovery, and providing a seamless trading experience. Inspired by the principles of Automated Market Makers (AMM) and the need to integrate robust financial tools, we set out to create Ringle, a platform that addresses these challenges and enhances the trading experience for NFTs.
 
-## ✨ **What it Does**
-We have created  liquidity pools for asset pairs (NFTs and other base tokens).
+### Getting Started
+This project is submitted to the BlockMagic Chainlink Hackathon, details of the same can be seen here - 
+Frontend Deployment - https://block-magic-hackathon.vercel.app/
 
-We have used AMM (Automated Market Makers) and Constant Product formula (xy = k ), which makes our platform highly liquid for NFT prices to trade.
-     
-To engage the beginner traders we have a short and easy game ‘GUESS AND CLAIM FREE NFT’, it leverages the service of Chainlink VRF to generate a fully random and fair number. 
+## 🚀 **Setting Up the Project Locally**
 
-Chainlink CCIP makes our platform offer services on other blockchains as well, it     enhances the customer experience  by 2x.
+### Prerequisites
+Node.js (v14 or later)
+Yarn or npm
+Foundry (for smart contract development)
 
-**Providing Liquidity to Asset Pairs:** - In an NFT automated market maker (AMM), providing liquidity to asset pairs can make the trading experience smoother and more reliable. Liquidity providers earn a share of the transaction fees, which encourages more users to provide liquidity. This increased liquidity helps stabilize prices.
+### Installation
 
-**Buying and Selling NFTs** -  You can sell NFTs through ERC-721 and also buy       fractionalised tokens of NFTs through ERC-20 tokens.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/yourusername/ringle-nft-amm.git
+   cd ringle-nft-amm
 
-**Guessing game with Chainlink VRF** -  If you are a new trader at Ringle and afraid to try it out, why not try and test your luck. Guess the correct number and get a chance to win FREE NFTs. 
+2. **Install dependencies:**
+   ```bash
+  cd frontend
+  yarn install
+  # or
+  npm install
 
-## 🛠️ **How We Built It**
-Although it was tough to have a transition from Solana to Ethereum so we have tried using simpler tools but also kept it mind the basic requirements of our platform. 
+3. **Run the frontend:**
+       ```bash
+  yarn dev
+  # or
+  npm run dev
+   
 
-- **Backend (Smart Contracts):** For writing & deploying Solidity code, we used the Foundry toolkit (i.e. forge) and Remix.
+5. **Compile the smart contracts:**
+    ```bash
+  cd ringle-nft-amm
+  forge build
 
-- **Frontend:**  We used SDKs and NextJS to create the UI designs. 
+5. **Deploy the smart contracts:**
+    ```bash
+    forge script script/Deploy.s.sol:Deploy --broadcast
 
-- **Chainlink Integration** -   Chainlink CCIP, Chainlink VRF
+ 
 
-- **Blockchain networks** - Sepolia Testnet, Polygon, Scroll
+## Links to Smart Contract Addresses
+Our Platform is deployed on Polygon Cardona(zkEVM) Testnet and Sepolia Testnet
 
-## 📕 **Challenges We Ran Into**
-- Integrating Smart contracts with the frontend was very trick but eventually we got to learn about new libraries (SDKs)
+## Polygon 
+  NFT__MINTED_ADDRESS= 0x56d63c1d644aD5373B4dEfA5000863b366a99D39
+  Ringle.sol = 0xE839f863f6ecD4cb9373288Cec8caa03F38E4fB0
+  Pair.sol = 0x94f482033A5284F91a2a3Cd813474B91dB32a210
+  explorerUrl: [Visit](https://cardona-zkevm.polygonscan.com)
+  
+## Sepolia Testnet
+  NFT__MINTED_ADDRESS= 0x846af542138f8194cdc5d2fa7df92aeeb20a9f25
+  Ringle.sol = 0xdd633270def2fd9086a646261652d31bc8c1cfe6
+  Pair.sol = 0x02595E42d72FD6347d989f4C24232DeFdF97623D
+  explorerUrl: [Visit](https://sepolia.etherscan.io/)
+   
+  
 
-- Some CCIP functions were confusing for us initially. We had to thoroughly understand the documentation and make relevant changes. 
-
-## 🎡 **Accomplishments That We're Proud Of**
-**Successful Deployment:** Fully deployed Ringle on multiple blockchain networks, ensuring broad accessibility.
-
-**Innovative Features:** Developed unique features like NFT wrapping and fractionalization, enhancing liquidity and tradability of high-value NFTs.
-
-**Seamless User Experience:** Achieved a user-friendly interface that simplifies complex DeFi and NFT interactions.
-
-**Security Integration:** Implemented robust security measures, leveraging Defender for automation and security in DeFi operations.
-
-## 🪡 **What We Learned**
-**Importance of Liquidity:** Effective liquidity management is crucial for the success of an NFT AMM platform.
-
-**User-Centric Design:** Creating a user-friendly interface significantly enhances user adoption and satisfaction.
-
-**Cross-Chain Integration:** Interoperability between blockchains is essential for expanding the user base and liquidity.
-
-**Data Accuracy:** Reliable data feeds are vital for accurate price discovery and overall platform reliability.
-
-## 🎈 **What's Next for Ringle**
-**Expanded Cross-Chain Functionality:** Further enhance cross-chain trading capabilities to include more blockchain networks.
-
-**Enhanced NFT Staking Rewards:** Develop more rewarding NFT staking mechanisms to attract more users.
-
-**Community Involvement:** Increase community engagement and participation through governance tokens and decentralized decision-making.
-
-**Advanced Analytics:** Integrate advanced analytics tools to provide users with deeper insights into NFT market trends and performance.
-
-**Partnerships and Integrations:** Forge new partnerships with other DeFi and NFT platforms to expand Ringle’s ecosystem and functionality.
+### Contributing
+Contributions to Ringle are welcome! Feel free to report bugs, suggest features, or submit pull requests
