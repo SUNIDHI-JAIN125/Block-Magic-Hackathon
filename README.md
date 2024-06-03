@@ -19,30 +19,35 @@ Foundry (for smart contract development)
    ```bash
    git clone https://github.com/yourusername/ringle-nft-amm.git
    cd ringle-nft-amm
+   ```
 
 2. **Install dependencies:**
    ```bash
-  cd frontend
-  yarn install
-  # or
-  npm install
+   cd frontend
+   yarn install
+   # or
+   npm install
+   ```
 
 3. **Run the frontend:**
-       ```bash
+  ```bash
   yarn dev
   # or
   npm run dev
+  ```
    
 
-5. **Compile the smart contracts:**
+4. **Compile the smart contracts:**
     ```bash
-  cd ringle-nft-amm
-  forge build
+    cd ringle-nft-amm
+    forge build
+    ```
+  
 
 5. **Deploy the smart contracts:**
     ```bash
     forge script script/Deploy.s.sol:Deploy --broadcast
-
+     ```
  
 
 ## Links to Smart Contract Addresses
