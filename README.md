@@ -5,6 +5,7 @@ The rapid evolution of decentralized finance (DeFi) has brought significant atte
 
 ### Getting Started
 This project is submitted to the BlockMagic Chainlink Hackathon, details of the same can be seen here - 
+
 Frontend Deployment - https://block-magic-hackathon.vercel.app/
 
 ## 🚀 **Setting Up the Project Locally**
