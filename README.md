@@ -30,11 +30,11 @@ Foundry (for smart contract development)
    ```
 
 3. **Run the frontend:**
-  ```bash
-  yarn dev
-  # or
-  npm run dev
-  ```
+    ```bash
+    yarn dev
+    # or
+    npm run dev
+    ```
    
 
 4. **Compile the smart contracts:**
@@ -54,16 +54,21 @@ Foundry (for smart contract development)
 Our Platform is deployed on Polygon Cardona(zkEVM) Testnet and Sepolia Testnet
 
 ## Polygon 
+
   NFT__MINTED_ADDRESS= 0x56d63c1d644aD5373B4dEfA5000863b366a99D39
+  
   Ringle.sol = 0xE839f863f6ecD4cb9373288Cec8caa03F38E4fB0
+  
   Pair.sol = 0x94f482033A5284F91a2a3Cd813474B91dB32a210
-  explorerUrl: [Visit](https://cardona-zkevm.polygonscan.com)
+  
+  explorerUrl: [Visit Polygon Explorer](https://cardona-zkevm.polygonscan.com)
   
 ## Sepolia Testnet
+
   NFT__MINTED_ADDRESS= 0x846af542138f8194cdc5d2fa7df92aeeb20a9f25
   Ringle.sol = 0xdd633270def2fd9086a646261652d31bc8c1cfe6
   Pair.sol = 0x02595E42d72FD6347d989f4C24232DeFdF97623D
-  explorerUrl: [Visit](https://sepolia.etherscan.io/)
+  explorerUrl: [Visit Sepolia EtherScan](https://sepolia.etherscan.io/)
    
   
 
