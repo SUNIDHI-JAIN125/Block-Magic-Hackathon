@@ -13,7 +13,9 @@ Frontend Deployment - https://block-magic-hackathon.vercel.app/
 
 ### Prerequisites
 Node.js (v14 or later)
+
 Yarn or npm
+
 Foundry (for smart contract development)
 
 
