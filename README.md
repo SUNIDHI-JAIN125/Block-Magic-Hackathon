@@ -3,6 +3,7 @@
 The rapid evolution of decentralized finance (DeFi) has brought significant attention to the potential of NFTs (Non-Fungible Tokens). However, the NFT market faces challenges such as liquidity, price discovery, and providing a seamless trading experience. Inspired by the principles of Automated Market Makers (AMM) and the need to integrate robust financial tools, we set out to create Ringle, a platform that addresses these challenges and enhances the trading experience for NFTs.
 
 
+
 ### Getting Started
 This project is submitted to the BlockMagic Chainlink Hackathon, details of the same can be seen here -  https://devpost.com/software/ringle
 
@@ -12,11 +13,9 @@ Frontend Deployment - https://block-magic-hackathon.vercel.app/
 
 
 ### Prerequisites
-Node.js (v14 or later)
-
-Yarn or npm
-
-Foundry (for smart contract development)
+ - Node.js (v14 or later)
+ - Yarn or npm
+ - Foundry (for smart contract development)
 
 
 ### Installation
