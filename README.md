@@ -23,8 +23,8 @@ Frontend Deployment - https://block-magic-hackathon.vercel.app/
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/ringle-nft-amm.git
-   cd ringle-nft-amm
+   git clone https://github.com/SUNIDHI-JAIN125/Block-Magic-Hackathon.git
+   cd Block-Magic-Hackathon
    ```
 
 2. **Install dependencies:**
